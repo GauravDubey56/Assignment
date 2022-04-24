@@ -3,11 +3,13 @@ const mongoose = require('mongoose');
 const MarketSchema = new mongoose.Schema({
     marketID: {
         type: String,
-        required: [true, 'Please add a custom id']
+        required: [true, 'Please add a custom id'],
+        unique: true
     },
     marketName : {
         type: String,
-        required: [true, 'Please add a market name']
+        required: [true, 'Please add a market name'],
+        unique: true
     },
     marketType : {
         type: String,

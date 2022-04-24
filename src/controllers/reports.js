@@ -39,6 +39,7 @@ exports.newRecord = async function(req, res, next){
 exports.getRecordById = async function (req, res, next) {
     try {
         const report = await Report.findById(req.body.id);
+        console.log(report)
         return res.status(200).json({
             success: true,
             data : report
