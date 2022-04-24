@@ -1,4 +1,4 @@
-const {Report} = require('../models');
+const {Report, Market, Cmdty} = require('../models');
 
 
 //@route POST /api/v1/report
@@ -8,16 +8,20 @@ const {Report} = require('../models');
 exports.newRecord = async function(req, res, next){
     try {
         const obj = req.body;
+        if(!(await Market.prototype.checkNameId(obj.marketID, obj.marketName) && await Cmdty.prototype.checkNameId(obj.cmdtyID, obj.cmdtyName))){
+            return res.status(200).json({
+                success: false,
+                msg : 'Either cmdty id-name and market id-name doesnt match or is entered wrong'
+            });
+        }
         const checkReport = await Report.prototype.findByMktCmdty(obj.cmdtyID, obj.marketID, obj.convFactor, obj.price, obj.userID);
         if(checkReport){
-            console.log('*******' + checkReport)
             return res.status(200).json({
                 success : true,
                 data : {reportID : checkReport.id}
             })
         } else {
             const report = await Report.prototype.addNewReport(obj);
-            console.log(report + '__---------')
             return res.status(200).json({
                 success: true,
                 data : {reportID : report.id}

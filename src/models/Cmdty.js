@@ -10,5 +10,12 @@ const CmdtySchema = new mongoose.Schema({
         required: [true, 'Please add a cmdty name']
     }
 })
-
-module.exports = mongoose.model('Cmdty', CmdtySchema);
+const Cmdty = mongoose.model('Cmdty', CmdtySchema);
+Cmdty.prototype.checkNameId = async function (cmdtyID, cmdtyName){
+    const cmdtyObj = await Cmdty.findOne({
+        cmdtyID, cmdtyName
+    })
+    if(cmdtyObj) return true;
+    else return false;
+}
+module.exports = Cmdty;

@@ -14,5 +14,12 @@ const MarketSchema = new mongoose.Schema({
         required : false
     }
 })
-
-module.exports = mongoose.model('Market', MarketSchema);
+const Market = mongoose.model('Market', MarketSchema);
+Market.prototype.checkNameId = async function (marketID, marketName){
+    const marketObj = await Market.findOne({
+        marketID, marketName
+    })
+    if(marketObj) return true;
+    else return false;
+}
+module.exports = Market

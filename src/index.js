@@ -31,6 +31,7 @@ connectDB();
 app.use('/api/v1/cmdty', routes.cmdty)
 app.use('/api/v1/market', routes.market)
 app.use('/api/v1/report', routes.reports)
-app.listen(3000, () => {
-    console.log('listening on port 3000');
+const port = process.env.PORT
+app.listen(port , () => {
+    console.log(`listening on port ${port}`);
 });
