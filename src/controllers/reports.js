@@ -18,13 +18,13 @@ exports.newRecord = async function(req, res, next){
         if(checkReport){
             return res.status(200).json({
                 success : true,
-                data : {reportID : checkReport.id}
+                data : {reportID : checkReport.id, isRecordNew : false}
             })
         } else {
             const report = await Report.prototype.addNewReport(obj);
             return res.status(200).json({
                 success: true,
-                data : {reportID : report.id}
+                data : {reportID : report.id, isRecordNew: true}
             })
         }
     } catch (error) {

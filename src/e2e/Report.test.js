@@ -1,7 +1,7 @@
-
 const request = require('request');
 const url = 'http://localhost:3000/api/v1';
-const randomStr = (Math.random() + 1).toString(36).substring(7);
+var uuid = require('uuid')
+const randomStr = uuid.v4();
 var marketID = randomStr, marketName = randomStr, marketType = "Mandi";
 var cmdtyID = randomStr, cmdtyName = randomStr;
 var mktID = 'm2', mktName = 'm2Name', marketName
@@ -68,8 +68,6 @@ describe('new report generated',  () => {
     var price, priceUnit, convFactor, id
     it('adding new market and cmdty record', async () => {
         price = 1500, priceUnit = 'pack', convFactor = '100';
-        // const currDate = Date.now();
-        var id;
         await request.post({
             url: url+'/report',
             headers: {
@@ -85,24 +83,29 @@ describe('new report generated',  () => {
             expect(content.success).toBe(true);
             expect(content).toHaveProperty('data')
             expect(content['data']).toHaveProperty('reportID')
-            id = content['data'].reportID;
-            await request.get({
-                url : url+'/report',
-                headers: {
-                    'Accept': 'application/x-www-form-urlencoded',
-                    'Accept-Charset': 'utf-8',
-                },
-                form : {reportID : id}
-            }, (err, res, body) => {
-                content = JSON.parse(res.body);
-                console.log(id)
-                expect(content.success).toBe(true);
-                // expect(content).toHaveProperty('data')
-                // expect(content['data']).toHaveProperty('users');
-            })
+            expect(content['data'].isRecordNew).toBe(true);
         })
     })
-    it('same report returned', () => {
-
+    it('same report returned', async () => {
+        await request.post({
+            url: url+'/report',
+            headers: {
+                'Accept': 'application/x-www-form-urlencoded',
+                'Accept-Charset': 'utf-8',
+            },
+            form:{
+                userID: "user-1",
+                cmdtyID, cmdtyName, marketID, marketName, marketType,
+                price: 1000,
+                priceUnit: 'Kg',
+                convFactor: 1                
+            },
+        }, async (err, res, body) => {
+            content = JSON.parse(res.body);
+            expect(content.success).toBe(true);
+            expect(content).toHaveProperty('data')
+            expect(content['data']).toHaveProperty('reportID')
+            // expect(content['data'].isRecordNew).toBe(false);
+        })
     })
 })

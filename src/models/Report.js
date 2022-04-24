@@ -37,7 +37,6 @@ Report.prototype.findByMktCmdty = async function (cmdtyID, marketID, convFactor,
         const report = await mongoose.model('Report').findOne({
             marketID, cmdtyID
         });
-        console.log(report)
         const basePrice = price / convFactor;
         if (report) {
             report.price = ((report.price * report.users.length) + basePrice) / (report.users.length + 1);
